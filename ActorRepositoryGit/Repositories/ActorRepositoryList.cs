@@ -70,8 +70,7 @@ var exisitingactor = GetById(id);
         {
 
             if (birthYearBefore == null && birthYearAfter == null)
-                return null;
-            return _actors;
+                        return _actors;
 
         }
     }
