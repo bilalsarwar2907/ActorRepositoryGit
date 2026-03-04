@@ -1,0 +1,6 @@
+@ActorRepositoryGit_HostAddress = http://localhost:5135
+
+GET {{ActorRepositoryGit_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
