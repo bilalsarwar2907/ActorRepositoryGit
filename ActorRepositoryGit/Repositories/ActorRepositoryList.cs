@@ -149,18 +149,18 @@ namespace ActorRepositoryGit.Repositories
                 {
                     case "id":
                         result = descending
-                            ? result.OrderByDescending(a => a.Id)
-                            : result.OrderBy(a => a.Id);
+                            ? result.OrderByDescending(actor => actor.Id)
+                            : result.OrderBy(actor => actor.Id);
                         break;
                     case "name":
                         result = descending
-                            ? result.OrderByDescending(a => a.Name)
-                            : result.OrderBy(a => a.Name);
+                            ? result.OrderByDescending(actor => actor.Name)
+                            : result.OrderBy(actor => actor.Name);
                         break;
                     case "birthyear":
                         result = descending
-                            ? result.OrderByDescending(a => a.YearOfBirth)
-                            : result.OrderBy(a => a.YearOfBirth);
+                            ? result.OrderByDescending(actor => actor.YearOfBirth)
+                            : result.OrderBy(actor => actor.YearOfBirth);
                         break;
                     default:
                         // No sorting or default
