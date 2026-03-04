@@ -1,4 +1,5 @@
 ﻿using ActorRepositoryGit.Models;
+using System.Collections.Generic;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace ActorRepositoryGit.Repositories
 {
@@ -36,14 +37,14 @@ namespace ActorRepositoryGit.Repositories
             return actor;
         }
         public Actor? Update(int id, Actor data)
-        { 
+        {
 
-var exisitingactor = GetById(id);
+            var exisitingactor = GetById(id);
             if (exisitingactor != null)
             {
                 exisitingactor.Name = data.Name;
                 exisitingactor.YearOfBirth = data.YearOfBirth;
-               
+
             }
             return exisitingactor;
         }
@@ -66,7 +67,7 @@ var exisitingactor = GetById(id);
             return _actors.Where(actor => actor.YearOfBirth < birthYearBefore);
 
         }
-        public IEnumerable<Actor> Get(int? birthYearBefore, int?birthYearAfter)
+        public IEnumerable<Actor> Get(int? birthYearBefore, int? birthYearAfter)
         {
 
             if (birthYearBefore == null && birthYearAfter == null)
@@ -90,11 +91,87 @@ var exisitingactor = GetById(id);
                 return _actors.Where(actor => actor.YearOfBirth > birthYearAfter.Value);
             }
             return _actors;
-          
         }
+        public IEnumerable<Actor> Get(string? nameContains)
+        {
+            // Return all actors if nameContains is null or empty
+            if (nameContains == null || nameContains.Trim() == "")
+                return _actors;
 
+            // Otherwise filter by name (case-insensitive, contains)
+            return _actors.Where(actor => actor.Name != null && actor.Name.Contains(nameContains, StringComparison.OrdinalIgnoreCase));
+        }
+        public IEnumerable<Actor> Get(int? birthYearBefore, string? nameContains)
+        {
+            IEnumerable<Actor> result = _actors;
 
+            if (birthYearBefore.HasValue)
+            {
+                result = result.Where(actor => actor.YearOfBirth < birthYearBefore.Value);
+
+            }
+
+            if (!string.IsNullOrWhiteSpace(nameContains))
+            {
+                result = result.Where(actor => actor.Name != null && actor.Name.Contains(nameContains, StringComparison.OrdinalIgnoreCase));
+            }
+            return result;
+        }
+        public IEnumerable<Actor> Get(int? birthYearBefore, int? birthYearAfter, string? nameContains)
+        {
+            IEnumerable<Actor> result = _actors;
+
+            if (birthYearBefore.HasValue)
+            {
+                result = result.Where(actor => actor.YearOfBirth < birthYearBefore.Value);
+            }
+
+            if (birthYearAfter.HasValue)
+            {
+                result = result.Where(actor => actor.YearOfBirth > birthYearAfter.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(nameContains))
+            {
+                result = result.Where(actor => actor.Name != null && actor.Name.Contains(nameContains, StringComparison.OrdinalIgnoreCase));
+
+            }
+            return result;
+
+        }
+        public IEnumerable<Actor> GetAll(string? sortBy = null, bool descending = false)
+        {
+            IEnumerable<Actor> result = _actors;
+
+            if (!string.IsNullOrWhiteSpace(sortBy))
+            {
+                switch (sortBy.ToLower())
+                {
+                    case "id":
+                        result = descending
+                            ? result.OrderByDescending(a => a.Id)
+                            : result.OrderBy(a => a.Id);
+                        break;
+                    case "name":
+                        result = descending
+                            ? result.OrderByDescending(a => a.Name)
+                            : result.OrderBy(a => a.Name);
+                        break;
+                    case "birthyear":
+                        result = descending
+                            ? result.OrderByDescending(a => a.YearOfBirth)
+                            : result.OrderBy(a => a.YearOfBirth);
+                        break;
+                    default:
+                        // No sorting or default
+                        break;
+                }
+            }
+
+            return result;
+        }
     }
-
 }
+
+
 
