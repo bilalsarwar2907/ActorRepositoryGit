@@ -70,10 +70,31 @@ var exisitingactor = GetById(id);
         {
 
             if (birthYearBefore == null && birthYearAfter == null)
-                        return _actors;
+            {
+                //If only birthYearBefore has value → return actors with birth year less than that value
+                return _actors;
+            }
+            //If both have values → return actors with birth year between after and before (after < year < before)
+            if (birthYearBefore.HasValue && birthYearAfter.HasValue)
+            {
+                return _actors.Where(actor => actor.YearOfBirth < birthYearBefore.Value && actor.YearOfBirth > birthYearAfter.Value);
+            }
+            if (birthYearBefore.HasValue)
+            {
+                return _actors.Where(actor => actor.YearOfBirth < birthYearBefore.Value);
+            }
+            //If only birthYearAfter has value → return actors with birth year greater than that value
 
+            if (birthYearAfter.HasValue)
+            {
+                return _actors.Where(actor => actor.YearOfBirth > birthYearAfter.Value);
+            }
+            return _actors;
+          
         }
-    }
+
 
     }
+
+}
 
