@@ -39,20 +39,32 @@ namespace ActorRepositoryGit.Properties
 
         // POST api/<ActorsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] Actor actor)
         {
+            if (actor == null)
+                return BadRequest();
+            var createdActor = _actorRepo.Add(actor);
+            return CreatedAtAction(nameof(GetById), new { id = createdActor.Id }, createdActor);
         }
 
         // PUT api/<ActorsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(int id, [FromBody] Actor actor)
         {
+            var updatedActor = _actorRepo.Update(id, actor);
+            if (updatedActor == null)
+                return NotFound();
+            return Ok(updatedActor);
         }
 
         // DELETE api/<ActorsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            var deletedActor = _actorRepo.Delete(id);
+            if (deletedActor == null)
+                return NotFound();
+            return NoContent();
         }
     }
 }
