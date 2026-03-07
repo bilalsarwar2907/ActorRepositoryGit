@@ -5,7 +5,9 @@ namespace ActorRepositoryGit.Repositories
 {
     public class ActorRepositoryList : IActorRepositoryList
     {
-
+        /// <summary>
+        /// ////// In-memory list to store actors. This simulates a database for the purpose of this example.
+        /// </summary>
         private readonly List<Actor> _actors = new List<Actor>();
 
         private int _nextId = 1;
