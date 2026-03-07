@@ -1,11 +1,19 @@
+using System.Collections.Generic;
+using ActorRepositoryGit.Models;
+using ActorRepositoryGit.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddControllers();
+builder.Services.AddSingleton<IActorRepositoryList, ActorRepositoryList>(); // Register the repository as a singleton
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseAuthorization();
+app.MapControllers();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

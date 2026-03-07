@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace ActorRepositoryGit.Repositories
 {
-    public class ActorRepositoryList
+    public class ActorRepositoryList : IActorRepositoryList
     {
 
         private readonly List<Actor> _actors = new List<Actor>();

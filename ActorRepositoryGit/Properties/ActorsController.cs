@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ActorRepositoryGit.Models;
+using ActorRepositoryGit.Repositories; // Ensure this using directive is present
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,18 +10,31 @@ namespace ActorRepositoryGit.Properties
     [ApiController]
     public class ActorsController : ControllerBase
     {
+        private readonly IActorRepositoryList _actorRepo;
+
+        // Constructor added to inject IActorRepository dependency
+        public ActorsController(IActorRepositoryList actorRepo)
+        {
+            _actorRepo = actorRepo;
+        }
+
         // GET: api/<ActorsController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            return Ok(_actorRepo.GetAll());
         }
 
         // GET api/<ActorsController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult GetById(int id)
         {
-            return "value";
+            var actor = _actorRepo.GetById(id);
+            if (actor == null)
+            
+                return NotFound();
+            return Ok(actor);
+
         }
 
         // POST api/<ActorsController>
