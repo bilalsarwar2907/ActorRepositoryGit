@@ -1,29 +1,40 @@
 using System.Collections.Generic;
 using ActorRepositoryGit.Models;
 using ActorRepositoryGit.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+// Add services
 builder.Services.AddControllers();
-builder.Services.AddSingleton<IActorRepositoryList, ActorRepositoryList>(); // Register the repository as a singleton
+builder.Services.AddSingleton<IActorRepositoryList, ActorRepositoryList>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Enable Swagger ALWAYS (Production + Development)
+app.UseSwagger();
+app.UseSwaggerUI();
+
+// Middleware
+app.UseHttpsRedirection();
+app.UseCors("AllowAll");   // FIXED: removed extra spaces
 app.UseAuthorization();
+
 app.MapControllers();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
+// Weather endpoint (optional)
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
